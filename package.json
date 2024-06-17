@@ -1,0 +1,32 @@
+{
+  "name": "image-annotation-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.19",
+    "@react-ol/fiber": "^1.0.0-beta.1",
+    "@types/ol": "^7.0.0",
+    "mui": "^0.0.1",
+    "next": "14.2.3",
+    "ol": "^9.2.4",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "null-loader": "^4.0.1",
+    "typescript": "^5"
+  }
+}
