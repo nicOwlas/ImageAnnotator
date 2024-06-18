@@ -15,28 +15,65 @@ const Home = () => {
   const [imageExtent, setImageExtent] = useState<
     [number, number, number, number]
   >([0, 0, 1024, 968]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [vectorSource, setVectorSource] = useState();
 
-  const handleImageLoad = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageUrl = e.target?.result as string;
-        const img = new Image();
-        img.onload = () => {
-          const width = img.width;
-          const height = img.height;
-          setImageExtent([0, 0, width, height]);
-          setImagePath(imageUrl);
-          setImageName(file.name);
-          console.log("image name", file.name);
-        };
-        img.src = imageUrl;
-      };
-      reader.readAsDataURL(file);
+  const handleDirectoryLoad = (fileList: FileList) => {
+    const files = Array.from(fileList).filter(
+      (file) => file.type === "image/jpeg"
+    );
+    const fileNames = files.map((file) => file.name);
+    setImageFiles(files);
+
+    if (files.length > 0) {
+      loadAndSetImage(files[0]);
     }
   };
+
+  const loadAndSetImage = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageUrl = e.target?.result as string;
+      const img = new Image();
+      img.onload = () => {
+        const width = img.width;
+        const height = img.height;
+        setImageExtent([0, 0, width, height]);
+        setImagePath(imageUrl);
+        setImageName(file.name); // Set the image name
+      };
+      img.src = imageUrl;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageSelect = (fileName: string) => {
+    const file = imageFiles.find((file) => file.name === fileName);
+    if (file) {
+      loadAndSetImage(file);
+    }
+  };
+
+  // const handleImageLoad = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       const imageUrl = e.target?.result as string;
+  //       const img = new Image();
+  //       img.onload = () => {
+  //         const width = img.width;
+  //         const height = img.height;
+  //         setImageExtent([0, 0, width, height]);
+  //         setImagePath(imageUrl);
+  //         setImageName(file.name);
+  //         console.log("image name", file.name);
+  //       };
+  //       img.src = imageUrl;
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const handleExportFeatures = () => {
     const features = vectorSource.getFeatures();
@@ -66,8 +103,10 @@ const Home = () => {
   return (
     <div className="container">
       <ControlCenter
-        onImageLoad={handleImageLoad}
+        onDirectoryLoad={handleDirectoryLoad}
+        onImageSelect={handleImageSelect}
         onExportFeatures={handleExportFeatures}
+        imageFiles={imageFiles.map((file) => file.name)}
       />
       <Canvas
         key={imagePath}
