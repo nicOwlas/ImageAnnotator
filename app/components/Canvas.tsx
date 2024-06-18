@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "ol/ol.css";
 import { Map } from "@react-ol/fiber";
 import { Stroke, Fill } from "ol/style";
 import { getCenter } from "ol/extent";
 import Projection from "ol/proj/Projection";
+
+interface CanvasProps {
+  imagePath: string;
+  imageExtent: [number, number, number, number];
+}
 
 export const extent = [0, 0, 1024, 968];
 export const projection = new Projection({
@@ -23,14 +28,35 @@ export const circleFill = new Fill({
   color: "#ffcc33",
 });
 
-const Canvas = ({
-  imagePath,
-  imageExtent,
-}: {
-  imagePath: string;
-  imageExtent: [number, number, number, number];
-}) => {
+const Canvas: React.FC<CanvasProps> = ({ imagePath, imageExtent }) => {
   const [vectorSource, setVectorSource] = useState();
+  const undoStack = useRef<Array<any>>([]); // Stack to hold the features for undo
+  const drawInteractionRef = useRef<Draw | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "z") {
+        const lastFeature = undoStack.current.pop();
+        console.log("lastFeature: ", lastFeature);
+        if (lastFeature && vectorSource) {
+          vectorSource.removeFeature(lastFeature);
+        }
+      } else if (event.key === "Escape" && drawInteractionRef.current) {
+        drawInteractionRef.current.abortDrawing();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [vectorSource]);
+
+  const handleDrawEnd = (event: any) => {
+    undoStack.current.push(event.feature); // Add the drawn feature to the undo stack
+    console.log("undoStack: ", undoStack);
+  };
+
   return (
     <Map style={{ width: "100%", height: "100%", position: "fixed" }}>
       <olView
@@ -60,11 +86,13 @@ const Canvas = ({
         <>
           <olInteractionModify source={vectorSource} />
           <olInteractionDraw
+            ref={drawInteractionRef}
             args={{
               type: "LineString",
               source: vectorSource,
               snapTolerance: 30,
             }}
+            onDrawend={handleDrawEnd}
           />
           <olInteractionSnap
             source={vectorSource}
