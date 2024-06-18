@@ -18,12 +18,12 @@ const ControlCenter: React.FC<ControlCenterProps> = ({
 }) => {
   return (
     <div className="control-center">
-      <DirectoryLoader
+      {/* <DirectoryLoader
         onDirectoryLoad={onDirectoryLoad}
         onImageSelect={onImageSelect}
         imageFiles={imageFiles}
         selectedImage={selectedImage}
-      />
+      /> */}
       <button onClick={onExportFeatures}>Export Features</button>
     </div>
   );

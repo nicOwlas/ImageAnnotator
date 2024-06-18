@@ -24,13 +24,13 @@ const DirectoryLoader: React.FC<DirectoryLoaderProps> = ({
           }
         }}
       />
-      <ul>
+      <select size={5} onChange={(e) => onImageSelect(e.target.value)}>
         {imageFiles.map((file, index) => (
-          <li key={index} onClick={() => onImageSelect(file)}>
+          <option key={index} onClick={() => onImageSelect(file)}>
             {file}
-          </li>
+          </option>
         ))}
-      </ul>
+      </select>
     </div>
   );
 };

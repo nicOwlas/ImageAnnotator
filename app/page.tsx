@@ -5,6 +5,7 @@
 import React, { useState } from "react";
 import Canvas from "./components/Canvas";
 import ControlCenter from "./components/ControlCenter";
+import DirectoryLoader from "./components/DirectoryLoader";
 import VectorSource from "ol/source/Vector";
 import { Feature } from "ol";
 import { GeoJSON } from "ol/format";
@@ -102,19 +103,26 @@ const Home = () => {
 
   return (
     <div className="container">
-      <ControlCenter
+      <DirectoryLoader
         onDirectoryLoad={handleDirectoryLoad}
         onImageSelect={handleImageSelect}
-        onExportFeatures={handleExportFeatures}
         imageFiles={imageFiles.map((file) => file.name)}
       />
-      <Canvas
-        key={imagePath}
-        imagePath={imagePath}
-        imageExtent={imageExtent}
-        vectorSource={vectorSource}
-        setVectorSource={setVectorSource}
-      />
+      <div className="right-panel">
+        <ControlCenter
+          onDirectoryLoad={handleDirectoryLoad}
+          onImageSelect={handleImageSelect}
+          onExportFeatures={handleExportFeatures}
+          imageFiles={imageFiles.map((file) => file.name)}
+        />
+        <Canvas
+          key={imagePath}
+          imagePath={imagePath}
+          imageExtent={imageExtent}
+          vectorSource={vectorSource}
+          setVectorSource={setVectorSource}
+        />
+      </div>
     </div>
   );
 };

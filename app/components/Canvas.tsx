@@ -63,7 +63,10 @@ const Canvas: React.FC<CanvasProps> = ({
   };
 
   return (
-    <Map style={{ width: "100%", height: "100%", position: "fixed" }}>
+    <Map
+      style={{ width: "100%", height: "100%", position: "relative" }}
+      className="canvas"
+    >
       <olView
         initialCenter={getCenter(imageExtent)}
         initialZoom={0}
