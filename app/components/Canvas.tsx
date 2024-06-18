@@ -37,7 +37,6 @@ const Canvas: React.FC<CanvasProps> = ({ imagePath, imageExtent }) => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "z") {
         const lastFeature = undoStack.current.pop();
-        console.log("lastFeature: ", lastFeature);
         if (lastFeature && vectorSource) {
           vectorSource.removeFeature(lastFeature);
         }
@@ -54,7 +53,6 @@ const Canvas: React.FC<CanvasProps> = ({ imagePath, imageExtent }) => {
 
   const handleDrawEnd = (event: any) => {
     undoStack.current.push(event.feature); // Add the drawn feature to the undo stack
-    console.log("undoStack: ", undoStack);
   };
 
   return (
