@@ -8,6 +8,8 @@ import Projection from "ol/proj/Projection";
 interface CanvasProps {
   imagePath: string;
   imageExtent: [number, number, number, number];
+  vectorSource: any;
+  setVectorSource: any;
 }
 
 export const extent = [0, 0, 1024, 968];
@@ -28,8 +30,13 @@ export const circleFill = new Fill({
   color: "#ffcc33",
 });
 
-const Canvas: React.FC<CanvasProps> = ({ imagePath, imageExtent }) => {
-  const [vectorSource, setVectorSource] = useState();
+const Canvas: React.FC<CanvasProps> = ({
+  imagePath,
+  imageExtent,
+  vectorSource,
+  setVectorSource,
+}) => {
+  // const [vectorSource, setVectorSource] = useState();
   const undoStack = useRef<Array<any>>([]); // Stack to hold the features for undo
   const drawInteractionRef = useRef<Draw | null>(null);
 
