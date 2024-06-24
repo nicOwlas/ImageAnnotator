@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 interface DirectoryLoaderProps {
   onImageSelect: (imagePath: string) => void;
@@ -17,16 +17,25 @@ const DirectoryLoader: React.FC<DirectoryLoaderProps> = ({
         type="file"
         webkitdirectory="true"
         multiple
+        id="directory-input"
         onChange={(e) => {
           const files = e.target.files;
           if (files) {
             onDirectoryLoad(files);
           }
         }}
+        style={{ display: "none" }} // Hide the default file input
       />
-      <select size={5} onChange={(e) => onImageSelect(e.target.value)}>
+      <label htmlFor="directory-input" className="directory-loader-button">
+        Load Images
+      </label>
+      <select
+        className="directory-loader-select"
+        size={500}
+        onChange={(e) => onImageSelect(e.target.value)}
+      >
         {imageFiles.map((file, index) => (
-          <option key={index} onClick={() => onImageSelect(file)}>
+          <option key={index} value={file}>
             {file}
           </option>
         ))}
